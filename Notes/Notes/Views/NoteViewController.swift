@@ -33,7 +33,7 @@ class NoteViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if !noteTextView.text.isEmpty {
-            viewModel.createNote(text: noteTextView.text)
+            viewModel.createNote(for: noteTextView.text)
         }
     }
     

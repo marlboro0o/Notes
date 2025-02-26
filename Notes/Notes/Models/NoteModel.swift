@@ -20,29 +20,13 @@ class NoteModel: ObservableObject, NoteBusinessLogic {
         notesSubject.eraseToAnyPublisher()
     }
     
-    func createNote(text: String) {
+    func createNote(for text: String) {
         let components = text.components(separatedBy: .newlines)
-        let note = Note(date: .now, title: components.first ?? "", content: components.dropFirst().joined(separator: " "))
+        
+        guard let title = components.first else { return }
+        
+        let note = Note(date: .now, title: title, content: components.dropFirst().joined(separator: " "))
         notes.append(note)
     }
 }
 
-struct Note {
-    let date: Date
-    let title: String
-    let content: String
-    
-    init(date: Date, title: String, content: String) {
-        self.date = date
-        self.title = title
-        self.content = content
-    }
-}
-
-struct NoteViewState {
-    let title: String
-    let content: String
-    let dateHeaderCell: String
-    let dateCell: String
-    let dateNote: String
-}

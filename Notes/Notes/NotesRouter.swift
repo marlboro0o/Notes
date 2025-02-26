@@ -7,17 +7,9 @@
 
 import UIKit
 
-enum NotesRouter {
-    static func createViewController() -> UIViewController {
-        let viewModel = NoteViewModel()
-        let viewController = NoteMainViewController(viewModel: viewModel)
-    
-        let navigationController = UINavigationController(rootViewController: viewController)
-        return navigationController
-    }
-    
-    static func openNote(navigation: UINavigationController?, viewModel: NotePresenting) {
+enum NotesRouter {    
+    static func openNote(navigation: UINavigationController, viewModel: NotePresenting) {
         let viewController = NoteViewController(viewModel: viewModel)
-        navigation?.pushViewController(viewController, animated: true)
+        navigation.pushViewController(viewController, animated: true)
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 struct DateFormatterHelper {
     
-    //пока заглушки
+    //TODO: - append implementation logic
     static func formatDateHeaderCell(_ date: Date) -> String {
         return ""
     }

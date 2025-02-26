@@ -10,16 +10,16 @@ import Combine
 
 final class NoteMainViewController: UIViewController {
     
-    private let viewModel: NotePresenting
+    private let viewModel: NoteMainPresenting
     private var cancellable: Set<AnyCancellable> = []
-    private var viewState: [NoteViewState] = []
+    private var viewState: [NoteMainViewState] = []
     private lazy var headLabel = makeLabelHead()
     private lazy var searchTextField = makeSearchTextField()
     private lazy var tableView = makeTableView()
     private lazy var footerView = makeFooterView()
     private lazy var newNoteButton = makeNewNoteButton()
     
-    init(viewModel: NotePresenting) {
+    init(viewModel: NoteMainPresenting) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,6 +33,39 @@ final class NoteMainViewController: UIViewController {
         setupUI()
         bind()
     }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        headLabel.frame = .init(
+            origin: .init(
+                x: view.bounds.minX + 20,
+                y: view.bounds.minY + 80),
+            size: CGSize(width: self.view.frame.width / 2, height: 50))
+        
+        searchTextField.frame = .init(
+            origin: .init(
+                x: view.bounds.minX + 20,
+                y: headLabel.frame.maxY + 10),
+            size: CGSize(width: view.bounds.width - 40, height: 40))
+
+        tableView.frame = .init(
+            origin: .init(
+                x: view.bounds.minX + 20,
+                y: searchTextField.frame.maxY + 20),
+            size: CGSize(width: Int(view.bounds.width) - 40, height: viewState.count * 80))
+        
+        footerView.frame = .init(
+            origin: .init(
+                x: view.bounds.minX,
+                y: view.bounds.maxY - 100),
+            size: CGSize(width: Int(view.frame.width), height: 100))
+        
+        newNoteButton.frame = .init(
+            origin: .init(
+                x: footerView.bounds.maxX - 50,
+                y: footerView.bounds.minY + 15),
+            size: CGSize(width: 30, height: 30))
+    }
+    
 }
 
 // MARK: - TableViewDataSource
@@ -42,7 +75,12 @@ extension NoteMainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath) as? NotesTableViewCell else { return UITableViewCell() }
+        guard 
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath) as? NotesTableViewCell
+        else {
+            assertionFailure("Всегда должен быть айтем на индексе")
+            return UITableViewCell()
+        }
         
         if let state = viewState[safe: indexPath.row] {
             cell.configure(state: state)
@@ -78,18 +116,20 @@ extension NoteMainViewController {
     private func bind() {
         viewModel.viewStatePublisher
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] values in
+            .sink { [weak self] values in
                 if let self = self {
                     self.viewState = values
                     self.tableView.reloadData()
-                    self.tableView.frame = CGRect(origin: self.tableView.frame.origin, size: CGSize(width: Int(self.tableView.bounds.width), height: values.count * 80))
-                }
-            })
+                    self.tableView.frame.size = .init(
+                        width: Int(view.bounds.width) - 40,
+                        height: viewState.count * 80)
+                   }
+            }
             .store(in: &cancellable)
     }
     
     private func makeLabelHead() -> UILabel {
-        let label = UILabel(frame: CGRect(origin: CGPoint(x: 20, y: 80), size: CGSize(width: self.view.frame.width / 2, height: 50)))
+        let label = UILabel()
         label.text = "Заметки"
         label.font = UIFont.boldSystemFont(ofSize: 40)
         
@@ -97,7 +137,7 @@ extension NoteMainViewController {
     }
     
     private func makeSearchTextField() -> UITextField {
-        let textField = UITextField(frame: CGRect(x: 20, y: 140, width: view.bounds.width - 40, height: 40))
+        let textField = UITextField()
         textField.placeholder = "Поиск"
         textField.borderStyle = .roundedRect
         textField.clearButtonMode = .whileEditing
@@ -118,7 +158,7 @@ extension NoteMainViewController {
     }
     
     private func makeTableView() -> UITableView {
-        let tableView = UITableView(frame: CGRect(x: 20, y: 200, width: view.bounds.width - 40, height: 50))
+        let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.layer.cornerRadius = 10
         tableView.layer.masksToBounds = true
@@ -130,16 +170,14 @@ extension NoteMainViewController {
     }
     
     private func makeFooterView() -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: Int(view.frame.height) - 100, width: Int(view.frame.width), height: 100))
+        let view = UIView()
         view.backgroundColor = .systemGray5
         return view
     }
     
     private func makeNewNoteButton() -> UIButton {
         
-        let sizeButton = 30
         let button = UIButton(type: .detailDisclosure)
-        button.frame = CGRect(x: Int(view.bounds.width) - sizeButton - 20, y: 15, width: sizeButton, height: sizeButton)
         
         button.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
         button.tintColor = .orange
@@ -160,7 +198,18 @@ extension NoteMainViewController {
     
     @objc private func didTapNewNote() {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Заметки", style: .plain, target: nil, action: nil)
-        NotesRouter.openNote(navigation: navigationController, viewModel: viewModel)
+        
+        guard let navigationController else { return }
+        viewModel.openNote(navigation: navigationController)
+        //NotesRouter.openNote(navigation: navigationController, viewModel: viewModel)
+    }
+}
+
+//MARK: - Constants
+extension NoteMainViewController {
+    private enum Constants {
+        static let tableSizeWidth: Int = -40
+        static let tableHeight: Int = 80
     }
 }
 

@@ -22,10 +22,28 @@ class NotesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(state: NoteViewState) {
-        titleLabel.text = state.title
-        contentLabel.text = state.content
+    override func layoutSubviews() {
+        titleLabel.frame = CGRect(
+            origin: CGPoint(
+                x: bounds.minX + Constants.titleX,
+                y: bounds.minY + Constants.titleY),
+            size: Constants.titleSize)
+        
+        contentLabel.frame = CGRect(
+            origin: CGPoint(
+                x: titleLabel.bounds.minX + Constants.bodyX,
+                y: titleLabel.bounds.maxY + Constants.bodyY),
+            size: Constants.bodySize)
     }
+    
+    func configure(state: NoteMainViewState) {
+        titleLabel.text = state.title
+        contentLabel.text = state.textBody
+    }
+}
+
+//MARK: - PrivateMethods
+extension NotesTableViewCell {
     
     private func setupUI() {
         backgroundColor = .white
@@ -41,16 +59,31 @@ class NotesTableViewCell: UITableViewCell {
     }
     
     private func makeTitleLabel() -> UILabel {
-        let label = UILabel(frame: CGRect(x: 25, y: 5, width: Int(containerView.bounds.width) - 40, height: 40))
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        let label = UILabel()
+        label.font = Constants.titleFont
         
         return label
     }
     
     private func makeContentLabel() -> UILabel {
-        let label = UILabel(frame: CGRect(x: 25, y: 35, width: Int(containerView.bounds.width) - 40, height: 40))
+        let label = UILabel()
+        label.font = Constants.bodyFont
         label.textColor = .gray
         
         return label
+    }
+}
+
+//MARK: - Constants
+extension NotesTableViewCell {
+    private enum Constants {
+        static let titleSize: CGSize = CGSize(width: 250, height: 40)
+        static let bodySize: CGSize = CGSize(width: 300, height: 40)
+        static let titleFont: UIFont = UIFont.boldSystemFont(ofSize: 18)
+        static let bodyFont: UIFont = UIFont.systemFont(ofSize: 16)
+        static let titleX: CGFloat = 25
+        static let titleY: CGFloat = 5
+        static let bodyX: CGFloat = 25
+        static let bodyY: CGFloat = -3
     }
 }

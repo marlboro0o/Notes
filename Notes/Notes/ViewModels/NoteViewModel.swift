@@ -2,39 +2,37 @@
 //  NoteViewModel.swift
 //  Notes
 //
-//  Created by Андрей on 27.01.2025.
+//  Created by Андрей on 25.02.2025.
 //
 
+import UIKit
 import Combine
-import Foundation
 
 final class NoteViewModel: ObservableObject, NotePresenting {
-    
-    private let model = NoteModel()
-    private var cancellables = Set<AnyCancellable>()
-    private let notesSubject: CurrentValueSubject<[NoteViewState], Never> = .init([])
     
     var viewStatePublisher: AnyPublisher<[NoteViewState], Never> {
         notesSubject.eraseToAnyPublisher()
     }
+    private let model: NoteModel
+    private let notesSubject: CurrentValueSubject<[NoteViewState], Never> = .init([])
+    private var cancellables = Set<AnyCancellable>()
     
-    init() {
+    
+    init(model: NoteModel) {
+        self.model = model
         self.bind()
     }
     
-    func createNote(text: String) {
-        model.createNote(text: text)
+    func createNote(for text: String) {
+        model.createNote(for: text)
     }
     
     private func bind() {
-        model.notesPublisher
-            .map { notes in
-                notes.map { element in NoteViewState(title: element.title, content: element.content, dateHeaderCell: DateFormatterHelper.formatDateHeaderCell(element.date), dateCell: DateFormatterHelper.formatDateCell(element.date), dateNote: DateFormatterHelper.formatDateNote(element.date))
-                }
-            }
-            .sink { [weak self] value in
-                self?.notesSubject.send(value)
-            }
-            .store(in: &cancellables)
+//        model.notesPublisher
+//            .sink { [weak self] value in
+//                guard let self else { return }
+//                notesSubject.send(toViewState(value))
+//            }
+//            .store(in: &cancellables)
     }
 }
