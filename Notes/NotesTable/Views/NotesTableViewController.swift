@@ -8,19 +8,21 @@
 import UIKit
 import Combine
 
-final class NoteMainViewController: UIViewController {
+final class NotesTableViewController: UIViewController {
     
-    private let viewModel: NoteMainPresenting
+    private let viewModel: NotesTablePresenting
+    private let router: NotesRouter
     private var cancellable: Set<AnyCancellable> = []
-    private var viewState: [NoteMainViewState] = []
+    private var viewState: [NotesTableViewState] = []
     private lazy var headLabel = makeLabelHead()
     private lazy var searchTextField = makeSearchTextField()
     private lazy var tableView = makeTableView()
     private lazy var footerView = makeFooterView()
     private lazy var newNoteButton = makeNewNoteButton()
     
-    init(viewModel: NoteMainPresenting) {
+    init(viewModel: NotesTablePresenting, router: NotesRouter) {
         self.viewModel = viewModel
+        self.router = router
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -37,39 +39,49 @@ final class NoteMainViewController: UIViewController {
     override func viewIsAppearing(_ animated: Bool) {
         headLabel.frame = .init(
             origin: .init(
-                x: view.bounds.minX + 20,
-                y: view.bounds.minY + 80),
-            size: CGSize(width: self.view.frame.width / 2, height: 50))
+                x: view.bounds.minX + Constants.headerLabelX,
+                y: view.bounds.minY + Constants.headerLabelY),
+            size: CGSize(
+                width: self.view.frame.width / 2,
+                height: 50))
         
         searchTextField.frame = .init(
             origin: .init(
-                x: view.bounds.minX + 20,
-                y: headLabel.frame.maxY + 10),
-            size: CGSize(width: view.bounds.width - 40, height: 40))
+                x: view.bounds.minX + Constants.searchTextFieldX,
+                y: headLabel.frame.maxY + Constants.searchTextFieldY),
+            size: CGSize(
+                width: view.bounds.width - 40,
+                height: 40))
 
         tableView.frame = .init(
             origin: .init(
-                x: view.bounds.minX + 20,
-                y: searchTextField.frame.maxY + 20),
-            size: CGSize(width: Int(view.bounds.width) - 40, height: viewState.count * 80))
+                x: view.bounds.minX + Constants.tableViewX,
+                y: searchTextField.frame.maxY + Constants.tableViewY),
+            size: CGSize(
+                width: Int(view.bounds.width) + Constants.tableViewWidth,
+                height: viewState.count * Constants.tableViewHeight))
         
         footerView.frame = .init(
             origin: .init(
-                x: view.bounds.minX,
-                y: view.bounds.maxY - 100),
-            size: CGSize(width: Int(view.frame.width), height: 100))
+                x: view.bounds.minX + Constants.footerViewX,
+                y: view.bounds.maxY + Constants.footerViewY),
+            size: CGSize(
+                width: Int(view.frame.width),
+                height: 100))
         
         newNoteButton.frame = .init(
             origin: .init(
-                x: footerView.bounds.maxX - 50,
-                y: footerView.bounds.minY + 15),
-            size: CGSize(width: 30, height: 30))
+                x: footerView.bounds.maxX + Constants.newNoteButtonX,
+                y: footerView.bounds.minY + Constants.newNoteButtonY),
+            size: CGSize(
+                width: 30,
+                height: 30))
     }
     
 }
 
 // MARK: - TableViewDataSource
-extension NoteMainViewController: UITableViewDataSource {
+extension NotesTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewState.count
     }
@@ -90,19 +102,19 @@ extension NoteMainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        80
+        CGFloat(Constants.tableViewHeight)
     }
 }
 
 // MARK: - TableViewDelegate
-extension NoteMainViewController: UITableViewDelegate {
+extension NotesTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         makeActionConfiguration(indexPath: indexPath)
     }
 }
 
 // MARK: - Private methods
-extension NoteMainViewController {
+extension NotesTableViewController {
     
     private func setupUI() {
         view.backgroundColor = .systemGray5
@@ -117,13 +129,28 @@ extension NoteMainViewController {
         viewModel.viewStatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] values in
-                if let self = self {
-                    self.viewState = values
-                    self.tableView.reloadData()
-                    self.tableView.frame.size = .init(
-                        width: Int(view.bounds.width) - 40,
-                        height: viewState.count * 80)
+                if let self {
+                    viewState = values
+                    tableView.reloadData()
+                    tableView.frame.size = .init(
+                        width: Int(view.bounds.width) + Constants.tableViewWidth,
+                        height: viewState.count * Constants.tableViewHeight)
                    }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.configPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                
+                guard 
+                    let self,
+                      let navigationController
+                else {
+                    return
+                }
+                    router.openNote(navigation: navigationController, viewModel: viewModel, config: value)
+                
             }
             .store(in: &cancellable)
     }
@@ -197,19 +224,25 @@ extension NoteMainViewController {
     }
     
     @objc private func didTapNewNote() {
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Заметки", style: .plain, target: nil, action: nil)
-        
-        guard let navigationController else { return }
-        viewModel.openNote(navigation: navigationController)
-        //NotesRouter.openNote(navigation: navigationController, viewModel: viewModel)
+        viewModel.didTapOpenNote()
     }
 }
 
 //MARK: - Constants
-extension NoteMainViewController {
+extension NotesTableViewController {
     private enum Constants {
-        static let tableSizeWidth: Int = -40
-        static let tableHeight: Int = 80
+        static let tableViewWidth: Int = -40
+        static let tableViewHeight: Int = 80
+        static let headerLabelX: CGFloat = 20
+        static let headerLabelY: CGFloat = 80
+        static let searchTextFieldX: CGFloat = 20
+        static let searchTextFieldY: CGFloat = 10
+        static let tableViewX: CGFloat = 20
+        static let tableViewY: CGFloat = 20
+        static let footerViewX: CGFloat = 0
+        static let footerViewY: CGFloat = -100
+        static let newNoteButtonX: CGFloat = -50
+        static let newNoteButtonY: CGFloat = 15
     }
 }
 

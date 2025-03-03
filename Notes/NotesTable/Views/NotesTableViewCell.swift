@@ -36,7 +36,7 @@ class NotesTableViewCell: UITableViewCell {
             size: Constants.bodySize)
     }
     
-    func configure(state: NoteMainViewState) {
+    func configure(state: NotesTableViewState) {
         titleLabel.text = state.title
         contentLabel.text = state.textBody
     }

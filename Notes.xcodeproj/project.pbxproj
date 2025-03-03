@@ -8,19 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		77DA28A02D47FB2900C22074 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA289F2D47FB2900C22074 /* SceneDelegate.swift */; };
-		77DA28A32D47FF9000C22074 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A22D47FF9000C22074 /* NoteModel.swift */; };
-		77DA28A52D48094400C22074 /* NoteMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A42D48094400C22074 /* NoteMainViewModel.swift */; };
+		77DA28A32D47FF9000C22074 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A22D47FF9000C22074 /* NotesModel.swift */; };
+		77DA28A52D48094400C22074 /* NotesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A42D48094400C22074 /* NotesTableViewModel.swift */; };
 		77DA28A72D4FE6FD00C22074 /* NotesRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A62D4FE6FC00C22074 /* NotesRouter.swift */; };
 		77DA28A92D53D95A00C22074 /* NotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A82D53D95A00C22074 /* NotesTableViewCell.swift */; };
 		77DA28AB2D56754C00C22074 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28AA2D56754C00C22074 /* NoteViewController.swift */; };
-		77DA28B12D5A5F6900C22074 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28B02D5A5F6900C22074 /* Protocols.swift */; };
+		77DA28B12D5A5F6900C22074 /* NotesTableProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28B02D5A5F6900C22074 /* NotesTableProtocols.swift */; };
 		77DA28B52D5D20CE00C22074 /* DateFormatterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28B42D5D20CE00C22074 /* DateFormatterHelper.swift */; };
 		77DA28B82D639F3000C22074 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28B72D639F3000C22074 /* Note.swift */; };
-		77DA28BA2D639F5900C22074 /* NoteMainViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28B92D639F5900C22074 /* NoteMainViewState.swift */; };
+		77DA28BA2D639F5900C22074 /* NotesTableViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28B92D639F5900C22074 /* NotesTableViewState.swift */; };
 		77DA28BC2D6E582D00C22074 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28BB2D6E582D00C22074 /* NoteViewModel.swift */; };
 		77DA28BE2D6E59FB00C22074 /* NoteViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28BD2D6E59FB00C22074 /* NoteViewState.swift */; };
+		77DA28C42D6F903900C22074 /* NoteProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28C32D6F903800C22074 /* NoteProtocols.swift */; };
+		77DA28C62D6F983A00C22074 /* NoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28C52D6F983A00C22074 /* NoteConfig.swift */; };
 		77F06D252D1C631F00D29193 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F06D242D1C631F00D29193 /* AppDelegate.swift */; };
-		77F06D292D1C631F00D29193 /* NoteMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F06D282D1C631F00D29193 /* NoteMainViewController.swift */; };
+		77F06D292D1C631F00D29193 /* NotesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F06D282D1C631F00D29193 /* NotesTableViewController.swift */; };
 		77F06D2E2D1C632100D29193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F06D2D2D1C632100D29193 /* Assets.xcassets */; };
 		77F06D312D1C632100D29193 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 77F06D302D1C632100D29193 /* Base */; };
 		77F06D3C2D1C632100D29193 /* NotesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F06D3B2D1C632100D29193 /* NotesTests.swift */; };
@@ -47,20 +49,22 @@
 
 /* Begin PBXFileReference section */
 		77DA289F2D47FB2900C22074 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		77DA28A22D47FF9000C22074 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
-		77DA28A42D48094400C22074 /* NoteMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteMainViewModel.swift; sourceTree = "<group>"; };
+		77DA28A22D47FF9000C22074 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
+		77DA28A42D48094400C22074 /* NotesTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewModel.swift; sourceTree = "<group>"; };
 		77DA28A62D4FE6FC00C22074 /* NotesRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesRouter.swift; sourceTree = "<group>"; };
 		77DA28A82D53D95A00C22074 /* NotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewCell.swift; sourceTree = "<group>"; };
 		77DA28AA2D56754C00C22074 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
-		77DA28B02D5A5F6900C22074 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		77DA28B02D5A5F6900C22074 /* NotesTableProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableProtocols.swift; sourceTree = "<group>"; };
 		77DA28B42D5D20CE00C22074 /* DateFormatterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterHelper.swift; sourceTree = "<group>"; };
 		77DA28B72D639F3000C22074 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
-		77DA28B92D639F5900C22074 /* NoteMainViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteMainViewState.swift; sourceTree = "<group>"; };
+		77DA28B92D639F5900C22074 /* NotesTableViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewState.swift; sourceTree = "<group>"; };
 		77DA28BB2D6E582D00C22074 /* NoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 		77DA28BD2D6E59FB00C22074 /* NoteViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewState.swift; sourceTree = "<group>"; };
+		77DA28C32D6F903800C22074 /* NoteProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteProtocols.swift; sourceTree = "<group>"; };
+		77DA28C52D6F983A00C22074 /* NoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteConfig.swift; sourceTree = "<group>"; };
 		77F06D212D1C631F00D29193 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F06D242D1C631F00D29193 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		77F06D282D1C631F00D29193 /* NoteMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteMainViewController.swift; sourceTree = "<group>"; };
+		77F06D282D1C631F00D29193 /* NotesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewController.swift; sourceTree = "<group>"; };
 		77F06D2D2D1C632100D29193 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		77F06D302D1C632100D29193 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		77F06D322D1C632100D29193 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,10 +103,9 @@
 		77DA289C2D47F99600C22074 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				77DA28A22D47FF9000C22074 /* NoteModel.swift */,
+				77DA28A22D47FF9000C22074 /* NotesModel.swift */,
 				77DA28B72D639F3000C22074 /* Note.swift */,
-				77DA28B92D639F5900C22074 /* NoteMainViewState.swift */,
-				77DA28BD2D6E59FB00C22074 /* NoteViewState.swift */,
+				77DA28B92D639F5900C22074 /* NotesTableViewState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -110,8 +113,8 @@
 		77DA289D2D47F9A100C22074 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				77F06D282D1C631F00D29193 /* NoteMainViewController.swift */,
-				77DA28AA2D56754C00C22074 /* NoteViewController.swift */,
+				77F06D282D1C631F00D29193 /* NotesTableViewController.swift */,
+				77DA28A82D53D95A00C22074 /* NotesTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -119,25 +122,21 @@
 		77DA289E2D47F9AC00C22074 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				77DA28A42D48094400C22074 /* NoteMainViewModel.swift */,
-				77DA28BB2D6E582D00C22074 /* NoteViewModel.swift */,
+				77DA28A42D48094400C22074 /* NotesTableViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		77DA28A12D47FC4F00C22074 /* Notes */ = {
+		77DA28A12D47FC4F00C22074 /* NotesTable */ = {
 			isa = PBXGroup;
 			children = (
 				77DA289C2D47F99600C22074 /* Models */,
-				77DA289D2D47F9A100C22074 /* Views */,
 				77DA289E2D47F9AC00C22074 /* ViewModels */,
-				77DA28A62D4FE6FC00C22074 /* NotesRouter.swift */,
+				77DA289D2D47F9A100C22074 /* Views */,
 				77DA28AD2D59295A00C22074 /* Animations */,
-				77DA28A82D53D95A00C22074 /* NotesTableViewCell.swift */,
-				77DA28B02D5A5F6900C22074 /* Protocols.swift */,
-				77DA28B62D639DFD00C22074 /* Helpers */,
+				77DA28B02D5A5F6900C22074 /* NotesTableProtocols.swift */,
 			);
-			path = Notes;
+			path = NotesTable;
 			sourceTree = "<group>";
 		};
 		77DA28AD2D59295A00C22074 /* Animations */ = {
@@ -153,6 +152,42 @@
 				77DA28B42D5D20CE00C22074 /* DateFormatterHelper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		77DA28BF2D6F8F2B00C22074 /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				77DA28C22D6F8F7400C22074 /* NoteViewModel */,
+				77DA28C02D6F8F4D00C22074 /* ViewState */,
+				77DA28C12D6F8F6100C22074 /* Views */,
+				77DA28C32D6F903800C22074 /* NoteProtocols.swift */,
+				77DA28C52D6F983A00C22074 /* NoteConfig.swift */,
+			);
+			path = Note;
+			sourceTree = "<group>";
+		};
+		77DA28C02D6F8F4D00C22074 /* ViewState */ = {
+			isa = PBXGroup;
+			children = (
+				77DA28BD2D6E59FB00C22074 /* NoteViewState.swift */,
+			);
+			path = ViewState;
+			sourceTree = "<group>";
+		};
+		77DA28C12D6F8F6100C22074 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				77DA28AA2D56754C00C22074 /* NoteViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		77DA28C22D6F8F7400C22074 /* NoteViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				77DA28BB2D6E582D00C22074 /* NoteViewModel.swift */,
+			);
+			path = NoteViewModel;
 			sourceTree = "<group>";
 		};
 		77F06D182D1C631F00D29193 = {
@@ -180,7 +215,10 @@
 			children = (
 				77F06D242D1C631F00D29193 /* AppDelegate.swift */,
 				77DA289F2D47FB2900C22074 /* SceneDelegate.swift */,
-				77DA28A12D47FC4F00C22074 /* Notes */,
+				77DA28A62D4FE6FC00C22074 /* NotesRouter.swift */,
+				77DA28BF2D6F8F2B00C22074 /* Note */,
+				77DA28A12D47FC4F00C22074 /* NotesTable */,
+				77DA28B62D639DFD00C22074 /* Helpers */,
 				77F06D2D2D1C632100D29193 /* Assets.xcassets */,
 				77F06D2F2D1C632100D29193 /* LaunchScreen.storyboard */,
 				77F06D322D1C632100D29193 /* Info.plist */,
@@ -335,16 +373,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				77DA28A52D48094400C22074 /* NoteMainViewModel.swift in Sources */,
-				77F06D292D1C631F00D29193 /* NoteMainViewController.swift in Sources */,
+				77DA28A52D48094400C22074 /* NotesTableViewModel.swift in Sources */,
+				77F06D292D1C631F00D29193 /* NotesTableViewController.swift in Sources */,
 				77DA28BC2D6E582D00C22074 /* NoteViewModel.swift in Sources */,
-				77DA28A32D47FF9000C22074 /* NoteModel.swift in Sources */,
-				77DA28B12D5A5F6900C22074 /* Protocols.swift in Sources */,
+				77DA28A32D47FF9000C22074 /* NotesModel.swift in Sources */,
+				77DA28B12D5A5F6900C22074 /* NotesTableProtocols.swift in Sources */,
 				77F06D252D1C631F00D29193 /* AppDelegate.swift in Sources */,
 				77DA28A72D4FE6FD00C22074 /* NotesRouter.swift in Sources */,
 				77DA28B52D5D20CE00C22074 /* DateFormatterHelper.swift in Sources */,
+				77DA28C62D6F983A00C22074 /* NoteConfig.swift in Sources */,
+				77DA28C42D6F903900C22074 /* NoteProtocols.swift in Sources */,
 				77DA28B82D639F3000C22074 /* Note.swift in Sources */,
-				77DA28BA2D639F5900C22074 /* NoteMainViewState.swift in Sources */,
+				77DA28BA2D639F5900C22074 /* NotesTableViewState.swift in Sources */,
 				77DA28BE2D6E59FB00C22074 /* NoteViewState.swift in Sources */,
 				77DA28A92D53D95A00C22074 /* NotesTableViewCell.swift in Sources */,
 				77DA28A02D47FB2900C22074 /* SceneDelegate.swift in Sources */,

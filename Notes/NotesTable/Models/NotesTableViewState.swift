@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NoteMainViewState {
+struct NotesTableViewState {
     let title: String
     let textBody: String
     let dateHeaderCell: String

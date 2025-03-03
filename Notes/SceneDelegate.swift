@@ -23,8 +23,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func createViewController() -> UIViewController {
         let model = NoteModel()
-        let viewModel = NoteMainViewModel(model: model)
-        let viewController = NoteMainViewController(viewModel: viewModel)
+        let viewModel = NotesTableViewModel(model: model)
+        let router = NotesRouter()
+        let viewController = NotesTableViewController(viewModel: viewModel, router: router)
     
         let navigationController = UINavigationController(rootViewController: viewController)
         return navigationController

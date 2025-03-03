@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class NoteModel: ObservableObject, NoteBusinessLogic {
+class NoteModel: ObservableObject, NoteModelLogic {
     
     private let notesSubject = PassthroughSubject<[Note], Never>()
     private var notes: [Note] = [] {
@@ -20,12 +20,7 @@ class NoteModel: ObservableObject, NoteBusinessLogic {
         notesSubject.eraseToAnyPublisher()
     }
     
-    func createNote(for text: String) {
-        let components = text.components(separatedBy: .newlines)
-        
-        guard let title = components.first else { return }
-        
-        let note = Note(date: .now, title: title, content: components.dropFirst().joined(separator: " "))
+    func createNote(note: Note) {
         notes.append(note)
     }
 }
