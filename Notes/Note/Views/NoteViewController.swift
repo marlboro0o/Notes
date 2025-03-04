@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class NoteViewController: UIViewController {
-   
     private let viewModel: NotePresenting
     private lazy var noteTextView = makeNoteTextView()
+    private var cancellables = Set<AnyCancellable>()
     
     init(viewModel: NotePresenting) {
         self.viewModel = viewModel
@@ -29,6 +30,8 @@ class NoteViewController: UIViewController {
         view.addGestureRecognizer(gesture)
         
         updateTextViewStyle()
+        bind()
+        viewModel.viewDidLoad()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -43,6 +46,15 @@ class NoteViewController: UIViewController {
         textView.isScrollEnabled = true
         textView.delegate = self
         return textView
+    }
+    
+    private func bind() {
+        viewModel.viewStatePublisher
+            .sink { [weak self] value in
+                guard let self else { return }
+                noteTextView.text = value.textBody
+                updateTextViewStyle()
+            }.store(in: &cancellables)
     }
     
     private func updateTextViewStyle() {

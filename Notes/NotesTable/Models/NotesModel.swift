@@ -23,5 +23,9 @@ class NoteModel: ObservableObject, NoteModelLogic {
     func createNote(note: Note) {
         notes.append(note)
     }
+    
+    func editNote(for index: Int, note: Note) {
+        notes[index] = note
+    }
 }
 

@@ -10,38 +10,39 @@ import Combine
 
 final class NoteViewModel: ObservableObject, NotePresenting {
     
-    var viewStatePublisher: AnyPublisher<[NoteViewState], Never> {
-        notesSubject.eraseToAnyPublisher()
+    var newNoteSubject = PassthroughSubject<NoteConfig, Never>()
+    var viewStatePublisher: AnyPublisher<NoteViewState, Never> {
+        viewStateSubject.eraseToAnyPublisher()
     }
-    let newNoteSubject = PassthroughSubject<NoteConfig, Never>()
-
-    private let config: NoteConfig
-    private let notesSubject: CurrentValueSubject<[NoteViewState], Never> = .init([])
-    
+    private var config: NoteConfig
+    private let viewStateSubject = PassthroughSubject<NoteViewState, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     init(config: NoteConfig) {
         self.config = config
     }
     
+    func viewDidLoad() {
+        viewStateSubject.send(config.toViewState())
+    }
+    
+    
     func createNote(for text: String) {
-        if let config = text.toConfig(date: config.date) {
-            newNoteSubject.send(config)
-        }
+        
+        let components = text.components(separatedBy: .newlines)
+        guard let title = components.first else { return }
+        
+        config.title = title
+        config.textBody = components.dropFirst().joined(separator: "\n")
+        newNoteSubject.send(config)
     }
     
 }
 
-private extension String {
-    func toConfig(date: Date) -> NoteConfig? {
-        let components = components(separatedBy: .newlines)
-        guard let title = components.first else { return nil }
-        
-        return NoteConfig(
-            title: title,
-            textBody: components
-                .dropFirst()
-                .joined(separator: " "),
-            date: date)
+private extension NoteConfig {
+    func toViewState() -> NoteViewState {
+        NoteViewState(
+            textBody: title == "" ? "" : "\(title)\n\(textBody)",
+            dateHeader: DateFormatterHelper.formatDateNote(date))
     }
 }

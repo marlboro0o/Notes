@@ -9,11 +9,13 @@ import Foundation
 import Combine
 
 protocol NotePresentingMethods {
+    func viewDidLoad()
     func createNote(for text: String)
 }
 
 protocol NotePresentingPublisher {
-    var viewStatePublisher: AnyPublisher<[NoteViewState], Never> { get }
+    var newNoteSubject: PassthroughSubject<NoteConfig, Never> { get }
+    var viewStatePublisher: AnyPublisher<NoteViewState, Never> { get }
 }
 
 typealias NotePresenting = NotePresentingMethods & NotePresentingPublisher

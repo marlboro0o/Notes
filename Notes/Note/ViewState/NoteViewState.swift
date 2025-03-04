@@ -8,7 +8,6 @@
 import Foundation
 
 struct NoteViewState {
-    let title: String
     let textBody: String
     let dateHeader: String
 }

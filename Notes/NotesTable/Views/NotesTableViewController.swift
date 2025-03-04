@@ -111,6 +111,11 @@ extension NotesTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         makeActionConfiguration(indexPath: indexPath)
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel.didTapOpenNote(for: indexPath.row)
+    }
 }
 
 // MARK: - Private methods
@@ -224,7 +229,7 @@ extension NotesTableViewController {
     }
     
     @objc private func didTapNewNote() {
-        viewModel.didTapOpenNote()
+        viewModel.didTapOpenNote(for: nil)
     }
 }
 

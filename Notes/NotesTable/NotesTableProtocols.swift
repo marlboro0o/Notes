@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 protocol NotesTablePresentingMethods {
-    func didTapOpenNote()
+    func didTapOpenNote(for index: Int?)
     func subscribeToNewNote(_ noteViewModel: NoteViewModel)
 }
 
@@ -22,6 +22,7 @@ typealias NotesTablePresenting = NotesTablePresentingMethods & NotesTablePresent
 
 protocol NoteModelMethods {
     func createNote(note: Note)
+    func editNote(for index: Int, note: Note)
 }
 
 protocol NoteModelPublisher {

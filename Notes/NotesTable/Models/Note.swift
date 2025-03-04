@@ -8,9 +8,17 @@
 import Foundation
 
 struct Note {
+    var id: UUID
     let date: Date
     let title: String
     let content: String
+    
+    init(date: Date, title: String, content: String) {
+        self.id = UUID()
+        self.date = date
+        self.title = title
+        self.content = content
+    }
 }
 
 

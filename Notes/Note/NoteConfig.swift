@@ -8,7 +8,8 @@
 import Foundation
 
 struct NoteConfig {
-    let title: String
-    let textBody: String
+    let id: UUID
+    var title: String
+    var textBody: String
     let date: Date
 }
