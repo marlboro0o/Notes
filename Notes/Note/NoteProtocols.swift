@@ -8,15 +8,19 @@
 import Foundation
 import Combine
 
+protocol NotePresentingProperties {
+    var viewState: NoteViewState { get }
+}
+
 protocol NotePresentingMethods {
     func viewDidLoad()
-    func createNote(for text: String)
+    func saveNote(for text: String)
+    func setProxy(_ proxy: NoteProxy)
 }
 
 protocol NotePresentingPublisher {
-    var newNoteSubject: PassthroughSubject<NoteConfig, Never> { get }
     var viewStatePublisher: AnyPublisher<NoteViewState, Never> { get }
 }
 
-typealias NotePresenting = NotePresentingMethods & NotePresentingPublisher
+typealias NotePresenting = NotePresentingProperties & NotePresentingMethods & NotePresentingPublisher
 

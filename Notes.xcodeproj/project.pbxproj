@@ -21,6 +21,7 @@
 		77DA28BE2D6E59FB00C22074 /* NoteViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28BD2D6E59FB00C22074 /* NoteViewState.swift */; };
 		77DA28C42D6F903900C22074 /* NoteProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28C32D6F903800C22074 /* NoteProtocols.swift */; };
 		77DA28C62D6F983A00C22074 /* NoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28C52D6F983A00C22074 /* NoteConfig.swift */; };
+		77DA28C82D779B7800C22074 /* NoteProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28C72D779B7800C22074 /* NoteProxy.swift */; };
 		77F06D252D1C631F00D29193 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F06D242D1C631F00D29193 /* AppDelegate.swift */; };
 		77F06D292D1C631F00D29193 /* NotesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F06D282D1C631F00D29193 /* NotesTableViewController.swift */; };
 		77F06D2E2D1C632100D29193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F06D2D2D1C632100D29193 /* Assets.xcassets */; };
@@ -62,6 +63,7 @@
 		77DA28BD2D6E59FB00C22074 /* NoteViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewState.swift; sourceTree = "<group>"; };
 		77DA28C32D6F903800C22074 /* NoteProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteProtocols.swift; sourceTree = "<group>"; };
 		77DA28C52D6F983A00C22074 /* NoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteConfig.swift; sourceTree = "<group>"; };
+		77DA28C72D779B7800C22074 /* NoteProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteProxy.swift; sourceTree = "<group>"; };
 		77F06D212D1C631F00D29193 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F06D242D1C631F00D29193 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		77F06D282D1C631F00D29193 /* NotesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewController.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				77DA28C02D6F8F4D00C22074 /* ViewState */,
 				77DA28C12D6F8F6100C22074 /* Views */,
 				77DA28C32D6F903800C22074 /* NoteProtocols.swift */,
+				77DA28C72D779B7800C22074 /* NoteProxy.swift */,
 				77DA28C52D6F983A00C22074 /* NoteConfig.swift */,
 			);
 			path = Note;
@@ -374,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77DA28A52D48094400C22074 /* NotesTableViewModel.swift in Sources */,
+				77DA28C82D779B7800C22074 /* NoteProxy.swift in Sources */,
 				77F06D292D1C631F00D29193 /* NotesTableViewController.swift in Sources */,
 				77DA28BC2D6E582D00C22074 /* NoteViewModel.swift in Sources */,
 				77DA28A32D47FF9000C22074 /* NotesModel.swift in Sources */,

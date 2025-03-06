@@ -10,10 +10,10 @@ import UIKit
 class NotesRouter: NotesRouting {
     func openNote(navigation: UINavigationController, viewModel: NotesTablePresenting, config: NoteConfig) {
         
-        navigation.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Заметки", style: .plain, target: nil, action: nil)
-        
+        let proxy = NoteProxy()
         let noteViewModel = NoteViewModel(config: config)
-        viewModel.subscribeToNewNote(noteViewModel)
+        noteViewModel.setProxy(proxy)
+        viewModel.setProxy(proxy)
        
         let viewController = NoteViewController(viewModel: noteViewModel)
         navigation.pushViewController(viewController, animated: true)

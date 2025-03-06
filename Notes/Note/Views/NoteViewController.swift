@@ -23,6 +23,9 @@ class NoteViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Заметки", style: .plain, target: nil, action: nil)
+        
         view.backgroundColor = .white
         view.addSubview(noteTextView)
         
@@ -34,15 +37,30 @@ class NoteViewController: UIViewController {
         viewModel.viewDidLoad()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        if !noteTextView.text.isEmpty {
-            viewModel.createNote(for: noteTextView.text)
-        }
+    override func viewIsAppearing(_ animated: Bool) {
+        noteTextView.frame = CGRect(
+            origin:
+                CGPoint(
+                    x: Constants.noteTextViewX,
+                    y: Constants.noteTextViewY),
+            size: CGSize(
+                width: view.bounds.width,
+                height: view.bounds.height + Constants.noteTextViewHeight))
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        if !noteTextView.text.isEmpty {
+            viewModel.saveNote(for: noteTextView.text)
+        }
+    }
+}
+
+//MARK: - Pivate methods
+extension NoteViewController {
+    
     private func makeNoteTextView() -> UITextView {
-        let textView = UITextView(frame: CGRect(x: 20, y: 100, width: view.bounds.width, height: view.bounds.height - 40))
-        textView.font = UIFont.systemFont(ofSize: 17)
+        let textView = UITextView()
+        textView.font = Constants.textBodyFont
         textView.isScrollEnabled = true
         textView.delegate = self
         return textView
@@ -58,20 +76,25 @@ class NoteViewController: UIViewController {
     }
     
     private func updateTextViewStyle() {
-        guard let text = noteTextView.text else { return }
+        guard 
+            let text = noteTextView.text,
+            !text.isEmpty 
+        else {
+            return
+        }
         
         let lines = text.components(separatedBy: .newlines)
         let attributedString = NSMutableAttributedString(string: text)
         
         let firstLineRange = (text as NSString).range(of: lines[0])
         attributedString.addAttributes([
-            .font: UIFont.systemFont(ofSize: 24, weight: .bold),
+            .font: Constants.titleFont,
             .foregroundColor: UIColor.label
         ], range: firstLineRange)
         
         let remainingTextRange = NSRange(location: firstLineRange.length, length: text.count - firstLineRange.length)
         attributedString.addAttributes([
-            .font: UIFont.systemFont(ofSize: 17, weight: .regular),
+            .font: Constants.textBodyFont,
             .foregroundColor: UIColor.label
         ], range: remainingTextRange)
         
@@ -95,9 +118,19 @@ class NoteViewController: UIViewController {
     }
 }
 
+//MARK: - TextViewDelegate
 extension NoteViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         updateTextViewStyle()
     }
+}
+
+//MARK: - Constants
+private enum Constants {
+    static let titleFont: UIFont = UIFont.systemFont(ofSize: 24, weight: .bold)
+    static let textBodyFont: UIFont = UIFont.systemFont(ofSize: 17, weight: .regular)
+    static let noteTextViewX: CGFloat = 20
+    static let noteTextViewY: CGFloat = 100
+    static let noteTextViewHeight: CGFloat = -40
 }
 

@@ -9,19 +9,19 @@ import Combine
 import Foundation
 
 final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
-    
-    var viewStatePublisher: AnyPublisher<[NotesTableViewState], Never> {
-        notesSubject.eraseToAnyPublisher()
+    var viewState: [NotesTableViewState] = []
+    var viewStatePublisher: AnyPublisher<Bool, Never> {
+        viewStateSubject.eraseToAnyPublisher()
     }
     var configPublisher: AnyPublisher<NoteConfig, Never> {
         configSubject.eraseToAnyPublisher()
     }
     
     private let model: NoteModelLogic
-    private let notesSubject: CurrentValueSubject<[NotesTableViewState], Never> = .init([])
+    private let viewStateSubject: CurrentValueSubject<Bool, Never> = .init(false)
     private let configSubject = PassthroughSubject<NoteConfig, Never>()
-    private var notes: [Note] = []
     private var cancellables = Set<AnyCancellable>()
+    private weak var proxy: NoteProxy?
     
     
     init(model: NoteModel) {
@@ -29,43 +29,55 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
         self.bind()
     }
     
-    func didTapOpenNote(for index: Int? = nil) {
-        
-        if let index,
-           let note = notes[safe: index] {
-            configSubject.send(note.toConfig())
-        } else {
-            configSubject.send(
-                NoteConfig(
-                    id: UUID(),
-                    title: "",
-                    textBody: "",
-                    date: .now))
-        }
+    func didTapOpenNote(for index: Int) {
+        guard let note = model.notes[safe: index] else { return }
+        configSubject.send(note.toConfig())
     }
     
-    func subscribeToNewNote(_ noteViewModel: NoteViewModel) {
-        noteViewModel.newNoteSubject
-            .sink { [weak self] config in
-                guard let self else { return }
-                
-                if let index = notes.firstIndex(where: { $0.id == config.id }) {
-                    model.editNote(for: index, note: notes[index])
-                } else {
-                    model.createNote(note: config.toNote())
-                }
-            }
-        .store(in: &cancellables)
+    func didTapAddNote() {
+        configSubject.send(NoteConfig.addNote())
+    }
+    
+    func addNote(config: NoteConfig) {
+        model.createNote(note: config.toNote())
+    }
+    
+    func editNote(config: NoteConfig) {
+        guard 
+            let index = model.notes.firstIndex(where: { $0.id == config.id })
+        else {
+            return
+        }
+        model.editNote(for: index, note: config.toNote())
+    }
+    
+    func setProxy(_ proxy: NoteProxy) {
+        self.proxy = proxy
+        bindToProxy()
     }
     
     private func bind() {
         model.notesPublisher
             .sink { [weak self] value in
                 guard let self else { return }
-                notes = value
-                notesSubject.send(toViewState(value))
+                viewState = toViewState(value)
+                viewStateSubject.send(true)
             }
             .store(in: &cancellables)
+    }
+    
+    private func bindToProxy() {
+        proxy?.addNotePublisher
+            .sink { [weak self] value in
+                guard let self else { return }
+                addNote(config: value)
+            }.store(in: &cancellables)
+        
+        proxy?.editNotePublisher
+            .sink { [weak self] value in
+                guard let self else { return }
+                editNote(config: value)
+            }.store(in: &cancellables)
     }
     
     private func toViewState(_ array: [Note]) -> [NotesTableViewState] {
@@ -87,7 +99,8 @@ private extension Note {
             id: id,
             title: title,
             textBody: content,
-            date: date)
+            date: date,
+            action: .edit)
     }
 }
 

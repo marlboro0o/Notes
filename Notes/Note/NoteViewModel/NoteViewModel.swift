@@ -9,40 +9,65 @@ import UIKit
 import Combine
 
 final class NoteViewModel: ObservableObject, NotePresenting {
+    var viewState: NoteViewState
     
-    var newNoteSubject = PassthroughSubject<NoteConfig, Never>()
     var viewStatePublisher: AnyPublisher<NoteViewState, Never> {
         viewStateSubject.eraseToAnyPublisher()
     }
-    private var config: NoteConfig
+    private let action: NoteActions
+    private let id: UUID
+    private let date: Date
     private let viewStateSubject = PassthroughSubject<NoteViewState, Never>()
     private var cancellables = Set<AnyCancellable>()
+    private var proxy: NoteProxy?
     
     init(config: NoteConfig) {
-        self.config = config
+        self.viewState = config.toViewState()
+        self.action = config.action
+        self.id = config.id
+        self.date = config.date
     }
     
     func viewDidLoad() {
-        viewStateSubject.send(config.toViewState())
+        viewStateSubject.send(viewState)
     }
     
     
-    func createNote(for text: String) {
-        
+    func saveNote(for text: String) {
         let components = text.components(separatedBy: .newlines)
-        guard let title = components.first else { return }
+        guard
+            let title = components.first,
+            let proxy
+        else {
+            return
+        }
         
-        config.title = title
-        config.textBody = components.dropFirst().joined(separator: "\n")
-        newNoteSubject.send(config)
+        let config = NoteConfig(
+            id: id,
+            title: title,
+            textBody: components.dropFirst().joined(separator: "\n"),
+            date: date,
+            action: action)
+        
+        switch action {
+        case .add:
+            proxy.addNote(config: config)
+        case .edit:
+            proxy.editNote(config: config)
+        }
     }
     
+    func setProxy(_ proxy: NoteProxy) {
+        self.proxy = proxy
+    }
 }
 
 private extension NoteConfig {
     func toViewState() -> NoteViewState {
         NoteViewState(
-            textBody: title == "" ? "" : "\(title)\n\(textBody)",
+            textBody: title.isEmpty ? "" : "\(title)\n\(textBody)",
             dateHeader: DateFormatterHelper.formatDateNote(date))
     }
 }
+
+

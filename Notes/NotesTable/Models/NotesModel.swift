@@ -10,8 +10,7 @@ import Combine
 
 class NoteModel: ObservableObject, NoteModelLogic {
     
-    private let notesSubject = PassthroughSubject<[Note], Never>()
-    private var notes: [Note] = [] {
+    var notes: [Note] = [] {
         didSet {
             notesSubject.send(notes)
         }
@@ -19,6 +18,7 @@ class NoteModel: ObservableObject, NoteModelLogic {
     var notesPublisher: AnyPublisher<[Note], Never> {
         notesSubject.eraseToAnyPublisher()
     }
+    private let notesSubject = PassthroughSubject<[Note], Never>()
     
     func createNote(note: Note) {
         notes.append(note)

@@ -9,7 +9,7 @@ import UIKit
 
 class NotesTableViewCell: UITableViewCell {
     
-    private lazy var containerView = makeContainerView()
+    private lazy var containerView = UIView()
     private lazy var titleLabel = makeTitleLabel()
     private lazy var contentLabel = makeContentLabel()
     
@@ -28,6 +28,14 @@ class NotesTableViewCell: UITableViewCell {
                 x: bounds.minX + Constants.titleX,
                 y: bounds.minY + Constants.titleY),
             size: Constants.titleSize)
+        
+        containerView.frame = CGRect(
+            origin: CGPoint(
+                x: Constants.containerViewX,
+                y: Constants.containerViewY),
+            size: CGSize(
+                width: contentView.bounds.width,
+                height: contentView.bounds.height))
         
         contentLabel.frame = CGRect(
             origin: CGPoint(
@@ -50,12 +58,6 @@ extension NotesTableViewCell {
         contentView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(contentLabel)
-    }
-    
-    private func makeContainerView() -> UIView {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: contentView.bounds.width, height: contentView.bounds.height))
-        
-        return view
     }
     
     private func makeTitleLabel() -> UILabel {
@@ -85,5 +87,7 @@ extension NotesTableViewCell {
         static let titleY: CGFloat = 5
         static let bodyX: CGFloat = 25
         static let bodyY: CGFloat = -3
+        static let containerViewX: CGFloat = 0
+        static let containerViewY: CGFloat = 0
     }
 }

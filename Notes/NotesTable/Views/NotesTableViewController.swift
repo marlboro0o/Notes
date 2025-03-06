@@ -13,7 +13,6 @@ final class NotesTableViewController: UIViewController {
     private let viewModel: NotesTablePresenting
     private let router: NotesRouter
     private var cancellable: Set<AnyCancellable> = []
-    private var viewState: [NotesTableViewState] = []
     private lazy var headLabel = makeLabelHead()
     private lazy var searchTextField = makeSearchTextField()
     private lazy var tableView = makeTableView()
@@ -53,13 +52,7 @@ final class NotesTableViewController: UIViewController {
                 width: view.bounds.width - 40,
                 height: 40))
 
-        tableView.frame = .init(
-            origin: .init(
-                x: view.bounds.minX + Constants.tableViewX,
-                y: searchTextField.frame.maxY + Constants.tableViewY),
-            size: CGSize(
-                width: Int(view.bounds.width) + Constants.tableViewWidth,
-                height: viewState.count * Constants.tableViewHeight))
+        setTableViewFrame()
         
         footerView.frame = .init(
             origin: .init(
@@ -83,7 +76,7 @@ final class NotesTableViewController: UIViewController {
 // MARK: - TableViewDataSource
 extension NotesTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewState.count
+        viewModel.viewState.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -94,7 +87,7 @@ extension NotesTableViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let state = viewState[safe: indexPath.row] {
+        if let state = viewModel.viewState[safe: indexPath.row] {
             cell.configure(state: state)
         }
         
@@ -133,24 +126,24 @@ extension NotesTableViewController {
     private func bind() {
         viewModel.viewStatePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] values in
-                if let self {
-                    viewState = values
-                    tableView.reloadData()
-                    tableView.frame.size = .init(
-                        width: Int(view.bounds.width) + Constants.tableViewWidth,
-                        height: viewState.count * Constants.tableViewHeight)
-                   }
+            .sink { [weak self] value in
+                guard
+                    let self,
+                    value
+                else {
+                    return
+                }
+                tableView.reloadData()
+                setTableViewFrame()
             }
             .store(in: &cancellable)
         
         viewModel.configPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-                
                 guard 
                     let self,
-                      let navigationController
+                    let navigationController
                 else {
                     return
                 }
@@ -228,8 +221,18 @@ extension NotesTableViewController {
         return UISwipeActionsConfiguration(actions: [deletedAction])
     }
     
+    private func setTableViewFrame() {
+        tableView.frame = .init(
+            origin: .init(
+                x: view.bounds.minX + Constants.tableViewX,
+                y: searchTextField.frame.maxY + Constants.tableViewY),
+            size: CGSize(
+                width: Int(view.bounds.width) + Constants.tableViewWidth,
+                height: viewModel.viewState.count * Constants.tableViewHeight))
+    }
+    
     @objc private func didTapNewNote() {
-        viewModel.didTapOpenNote(for: nil)
+        viewModel.didTapAddNote()
     }
 }
 
