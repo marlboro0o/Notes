@@ -7,8 +7,8 @@
 
 import UIKit
 
-class NotesRouter: NotesRouting {
-    func openNote(navigation: UINavigationController, viewModel: NotesTablePresenting, config: NoteConfig) {
+final class NotesRouter: NotesRouting {
+    func openNote(navigation: UINavigationController, viewModel: NotesTablePresenting, config: NoteConfig?) {
         
         let proxy = NoteProxy()
         let noteViewModel = NoteViewModel(config: config)

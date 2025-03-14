@@ -9,20 +9,21 @@ import UIKit
 import Combine
 
 protocol NotesTablePresentingProperties {
-    var viewState: [NotesTableViewState] { get }
+    var viewState: [NotesTableViewSections] { get }
 }
 
 protocol NotesTablePresentingMethods {
     func didTapAddNote()
-    func didTapOpenNote(for index: Int)
+    func didTapOpenNote(for index: Int, section: Int)
     func addNote(config: NoteConfig)
     func editNote(config: NoteConfig)
+    func deleteNote(for index: Int, section: Int)
     func setProxy(_ proxy: NoteProxy)
 }
 
 protocol NotesTablePresentingPublisher {
     var viewStatePublisher: AnyPublisher<Bool, Never> { get }
-    var configPublisher: AnyPublisher<NoteConfig, Never> { get }
+    var configPublisher: AnyPublisher<NoteConfig?, Never> { get }
 }
 
 typealias NotesTablePresenting = NotesTablePresentingProperties & NotesTablePresentingMethods & NotesTablePresentingPublisher
@@ -34,6 +35,7 @@ protocol NotesModelProperties {
 protocol NoteModelMethods {
     func createNote(note: Note)
     func editNote(for index: Int, note: Note)
+    func deleteNote(for index: Int)
 }
 
 protocol NoteModelPublisher {
@@ -43,5 +45,5 @@ protocol NoteModelPublisher {
 typealias NoteModelLogic = NotesModelProperties & NoteModelMethods & NoteModelPublisher
 
 protocol NotesRouting {
-    func openNote(navigation: UINavigationController, viewModel: NotesTablePresenting, config: NoteConfig)
+    func openNote(navigation: UINavigationController, viewModel: NotesTablePresenting, config: NoteConfig?)
 }

@@ -8,9 +8,9 @@
 import Foundation
 import Combine
 
-protocol NotePresentingProperties {
-    var viewState: NoteViewState { get }
-}
+//protocol NotePresentingProperties {
+//    var viewState: NoteViewState { get }
+//}
 
 protocol NotePresentingMethods {
     func viewDidLoad()
@@ -19,8 +19,8 @@ protocol NotePresentingMethods {
 }
 
 protocol NotePresentingPublisher {
-    var viewStatePublisher: AnyPublisher<NoteViewState, Never> { get }
+    var viewStatePublisher: AnyPublisher<NoteViewState?, Never> { get }
 }
 
-typealias NotePresenting = NotePresentingProperties & NotePresentingMethods & NotePresentingPublisher
+typealias NotePresenting = NotePresentingMethods & NotePresentingPublisher
 
