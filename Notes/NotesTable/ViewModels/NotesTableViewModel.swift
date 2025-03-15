@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
-    var viewState: [NotesTableViewSections] = []
+    var viewState: [NotesTableViewState] = []
     var viewStatePublisher: AnyPublisher<Bool, Never> {
         viewStateSubject.eraseToAnyPublisher()
     }
@@ -29,11 +29,8 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
         self.bind()
     }
     
-    func didTapOpenNote(for index: Int, section: Int) {
-        
-        let _index = findIndexNoteInViewState(for: index, section: section)
-        
-        guard let note = model.notes[safe: _index] else { return }
+    func didTapOpenNote(for index: Int) {
+        guard let note = model.notes[safe: index] else { return }
         configSubject.send(note.toConfig())
     }
     
@@ -52,11 +49,6 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
             return
         }
         model.editNote(for: index, note: config.toNote())
-    }
-    
-    func deleteNote(for index: Int, section: Int) {
-        let _index = findIndexNoteInViewState(for: index, section: section)
-        model.deleteNote(for: _index)
     }
     
     func setProxy(_ proxy: NoteProxy) {
@@ -88,39 +80,8 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
             }.store(in: &cancellables)
     }
     
-    private func toViewState(_ array: [Note]) -> [NotesTableViewSections] {
-        var result: [NotesTableViewSections] = []
-        
-        let viewState = array.map {
-            $0.toViewState()
-        }
-        
-        viewState.forEach { body in
-            if let index = result.firstIndex(where: { body.dateHeaderCell == $0.header }) {
-                result[index].viewState.append(body)
-            } else {
-                result.append(NotesTableViewSections(header: body.dateHeaderCell, viewState: [body]))
-            }
-        }
-        
-        return result
-    }
-    
-    private func findIndexNoteInViewState(for index: Int, section: Int) -> Int {
-        var _index = 0
-        var _section = 0
-        
-        while _index < model.notes.count {
-            if section == _section {
-                _index += index
-                break
-            }
-            
-            _index += viewState[_section].viewState.count
-            _section += 1
-        }
-        
-        return _index
+    private func toViewState(_ array: [Note]) -> [NotesTableViewState] {
+        array.map { $0.toViewState() }
     }
 }
 

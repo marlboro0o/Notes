@@ -8,10 +8,9 @@
 import UIKit
 import Combine
 
-final class NoteViewController: UIViewController {
+class NoteViewController: UIViewController {
     private let viewModel: NotePresenting
     private lazy var noteTextView = makeNoteTextView()
-    private lazy var footerView = UIView()
     private var cancellables = Set<AnyCancellable>()
     
     init(viewModel: NotePresenting) {
@@ -24,11 +23,11 @@ final class NoteViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Заметки", style: .plain, target: nil, action: nil)
         
         view.backgroundColor = .white
         view.addSubview(noteTextView)
-        view.addSubview(footerView)
         
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(swipeView))
         view.addGestureRecognizer(gesture)
@@ -46,13 +45,6 @@ final class NoteViewController: UIViewController {
             size: CGSize(
                 width: view.bounds.width,
                 height: view.bounds.height + Constants.noteTextViewHeight))
-        footerView.frame = CGRect(
-            origin: CGPoint(
-                x: view.bounds.minX + Constants.footerViewX,
-                y: view.bounds.maxY + Constants.footerViewY),
-            size: CGSize(
-                width: view.bounds.width,
-                height: Constants.footerViewHeight))
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -76,9 +68,9 @@ extension NoteViewController {
     private func bind() {
         viewModel.viewStatePublisher
             .sink { [weak self] value in
-                guard 
+                guard
                     let self,
-                    let viewState = value 
+                    let viewState = value
                 else {
                     return
                 }
@@ -144,8 +136,5 @@ private enum Constants {
     static let noteTextViewX: CGFloat = 20
     static let noteTextViewY: CGFloat = 100
     static let noteTextViewHeight: CGFloat = -40
-    static let footerViewX: CGFloat = 0
-    static let footerViewY: CGFloat = -100
-    static let footerViewHeight: CGFloat = 100
 }
 

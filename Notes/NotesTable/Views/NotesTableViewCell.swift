@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NotesTableViewCell: UITableViewCell {
+class NotesTableViewCell: UITableViewCell {
     
     private lazy var containerView = UIView()
     private lazy var titleLabel = makeTitleLabel()
@@ -46,36 +46,7 @@ final class NotesTableViewCell: UITableViewCell {
     
     func configure(state: NotesTableViewState) {
         titleLabel.text = state.title
-        contentLabel.text = "\(state.dateCell) \(state.textBody)"
-    }
-    
-    func roundCorners(for position: CellPosition) {
-        let maskPath: UIBezierPath
-        
-        switch position {
-        case .top:
-            maskPath = UIBezierPath(
-                roundedRect: bounds,
-                byRoundingCorners: [.topLeft, .topRight],
-                cornerRadii: CGSize(width: 10, height: 10))
-        case .bottom:
-            maskPath = UIBezierPath(
-                roundedRect: bounds,
-                byRoundingCorners: [.bottomLeft, .bottomRight],
-                cornerRadii: CGSize(width: 10, height: 10))
-        case .single:
-            maskPath = UIBezierPath(
-                roundedRect: bounds,
-                byRoundingCorners: [.allCorners],
-                cornerRadii: CGSize(width: 10, height: 10))
-        case .middle:
-            layer.mask = nil
-            return
-        }
-        
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = maskPath.cgPath
-        layer.mask = maskLayer
+        contentLabel.text = state.textBody
     }
 }
 
@@ -119,11 +90,4 @@ extension NotesTableViewCell {
         static let containerViewX: CGFloat = 0
         static let containerViewY: CGFloat = 0
     }
-}
-
-enum CellPosition {
-    case top
-    case bottom
-    case single
-    case middle
 }

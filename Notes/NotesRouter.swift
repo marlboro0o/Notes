@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NotesRouter: NotesRouting {
+class NotesRouter: NotesRouting {
     func openNote(navigation: UINavigationController, viewModel: NotesTablePresenting, config: NoteConfig?) {
         
         let proxy = NoteProxy()

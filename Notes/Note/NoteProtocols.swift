@@ -8,10 +8,6 @@
 import Foundation
 import Combine
 
-//protocol NotePresentingProperties {
-//    var viewState: NoteViewState { get }
-//}
-
 protocol NotePresentingMethods {
     func viewDidLoad()
     func saveNote(for text: String)
