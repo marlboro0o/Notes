@@ -192,7 +192,6 @@ extension NotesTableViewController {
                     return
                 }
                 tableView.reloadData()
-               // setTableViewFrame()
             }
             .store(in: &cancellable)
         
@@ -278,16 +277,6 @@ extension NotesTableViewController {
         }
         
         return UISwipeActionsConfiguration(actions: [deletedAction])
-    }
-    
-    private func setTableViewFrame() {
-        tableView.frame = CGRect(
-            origin: CGPoint(
-                x: view.bounds.minX + Constants.tableViewX,
-                y: searchTextField.frame.maxY + Constants.tableViewY),
-            size: CGSize(
-                width: Int(view.bounds.width) + Constants.tableViewWidth,
-                height: (viewModel.viewState.map { $0.viewState.count} .reduce(0, +) * Constants.tableViewHeight) + (viewModel.viewState.count * Int(Constants.tableViewHeaderHeight + Constants.tableViewFooterHeight * 2))))
     }
     
     @objc private func didTapNewNote() {
