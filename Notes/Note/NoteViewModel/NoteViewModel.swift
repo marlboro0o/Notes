@@ -22,7 +22,6 @@ final class NoteViewModel: ObservableObject, NotePresenting {
     private var proxy: NoteProxy?
     
     init(config: NoteConfig?) {
-        
         if let config {
             self.viewState = config.toViewState()
             self.action = config.action
@@ -38,7 +37,6 @@ final class NoteViewModel: ObservableObject, NotePresenting {
     func viewDidLoad() {
         viewStateSubject.send(viewState)
     }
-    
     
     func saveNote(for text: String) {
         let components = text.components(separatedBy: .newlines)

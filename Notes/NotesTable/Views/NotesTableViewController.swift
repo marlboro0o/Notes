@@ -52,7 +52,13 @@ final class NotesTableViewController: UIViewController {
                 width: view.bounds.width - 40,
                 height: 40))
 
-        setTableViewFrame()
+        tableView.frame = CGRect(
+            origin: CGPoint(
+                x: view.bounds.minX + Constants.tableViewX,
+                y: searchTextField.frame.maxY + Constants.tableViewY),
+            size: CGSize(
+                width: Int(view.bounds.width) + Constants.tableViewWidth,
+                height: Int(view.bounds.height) - Int(searchTextField.frame.maxY + Constants.tableViewY) - 70))
         
         footerView.frame = .init(
             origin: .init(
@@ -186,7 +192,7 @@ extension NotesTableViewController {
                     return
                 }
                 tableView.reloadData()
-                setTableViewFrame()
+               // setTableViewFrame()
             }
             .store(in: &cancellable)
         
