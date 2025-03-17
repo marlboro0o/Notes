@@ -7,13 +7,14 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4F15785D-517E-46AD-99CE-0D9B6244622C"
+            uuid = "A524502E-2000-4EF9-9FB9-A43BBEE7893C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Notes/NotesTable/Models/NotesModel.swift"
+            filePath = "Notes/Note/Views/NoteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
+<<<<<<< HEAD
             startingLineNumber = "15"
             endingLineNumber = "15"
             landmarkName = "notes"
@@ -97,6 +98,11 @@
             startingLineNumber = "27"
             endingLineNumber = "27"
             landmarkName = "init()"
+=======
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "updateTextViewStyle()"
+>>>>>>> main
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
