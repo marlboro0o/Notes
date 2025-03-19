@@ -83,12 +83,12 @@ final class NotesTableViewController: UIViewController {
 extension NotesTableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = viewModel.viewState[safe: section] else { return 0 }
-        return section.viewState.count
+        guard let section = viewModel.viewState.sections[safe: section] else { return 0 }
+        return section.rows.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.viewState.count
+        viewModel.viewState.sections.count
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -113,7 +113,7 @@ extension NotesTableViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let viewState = viewModel.viewState[safe: section] {
+        if let viewState = viewModel.viewState.sections[safe: section] {
             cell.configure(text: viewState.header)
         }
         
@@ -128,8 +128,8 @@ extension NotesTableViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let section = viewModel.viewState[safe: indexPath.section],
-           let viewState = section.viewState[safe: indexPath.row] {
+        if let section = viewModel.viewState.sections[safe: indexPath.section],
+           let viewState = section.rows[safe: indexPath.row] {
             cell.configure(state: viewState)
         }
         
@@ -165,7 +165,7 @@ extension NotesTableViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        viewModel.didTapOpenNote(for: indexPath.row, section: indexPath.section)
+        viewModel.didTapOpenNote(for: indexPath)
     }
 }
 
@@ -273,7 +273,7 @@ extension NotesTableViewController {
         
         let deletedAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, _)  in
             guard let self else { return }
-            viewModel.deleteNote(for: indexPath.row, section: indexPath.section)
+            viewModel.deleteNote(for: indexPath)
         }
         
         return UISwipeActionsConfiguration(actions: [deletedAction])

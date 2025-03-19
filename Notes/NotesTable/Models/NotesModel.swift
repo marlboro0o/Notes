@@ -12,6 +12,7 @@ class NoteModel: ObservableObject, NoteModelLogic {
     
     var notes: [Note] = [] {
         didSet {
+            notes.sort { $0.date > $1.date }
             notesCaretacer.save(values: notes)
             notesSubject.send(notes)
         }
@@ -20,7 +21,7 @@ class NoteModel: ObservableObject, NoteModelLogic {
         notesSubject.eraseToAnyPublisher()
     }
     private let notesSubject: CurrentValueSubject<[Note], Never> = .init([])
-    private let notesCaretacer = NotesTableCaretacer(key: "Notes")
+    private let notesCaretacer = NotesTableCaretacer()
     
     init() {
         notes = notesCaretacer.load()
@@ -28,7 +29,7 @@ class NoteModel: ObservableObject, NoteModelLogic {
     }
     
     func createNote(note: Note) {
-        notes.insert(note, at: 0)
+        notes.append(note)
     }
     
     func editNote(for index: Int, note: Note) {

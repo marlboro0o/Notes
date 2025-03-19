@@ -44,7 +44,7 @@ final class NotesTableViewCell: UITableViewCell {
             size: Constants.bodySize)
     }
     
-    func configure(state: NotesTableViewState) {
+    func configure(state: NotesTableViewRow) {
         titleLabel.text = state.title
         contentLabel.text = "\(state.dateCell) \(state.textBody)"
     }

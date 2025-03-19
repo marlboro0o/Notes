@@ -7,26 +7,39 @@
 
 import Foundation
 
-struct DateFormatterHelper {
+enum DateFormatterHelper {
     
     static func formatDateHeaderCell(_ date: Date) -> String {
+        return mapDateToString(date: date)
+    }
+    
+    static func formatDateCell(_ date: Date) -> String {
+        return formatDateToString(date: date, format: "dd.MM.yyyy")
+    }
+    
+    //TODO: - append implementation logic
+    static func formatDateNote(_ date: Date) -> String {
+        return "\(formatDateToString(date: date, format: "dd.MMMM.yyyy")) в \(formatDateToString(date: date, format: "TTTT"))"
+    }
+}
+
+//MARK: - Private methods
+extension DateFormatterHelper {
+    static private func mapDateToString(date: Date) -> String {
         let calendar = Calendar.current
         let now = Date()
         
         if calendar.isDateInToday(date) {
             return "Сегодня"
-        }
-        
-        if calendar.isDateInYesterday(date) {
+        } else if calendar.isDateInYesterday(date) {
             return "Вчера"
-        }
-        
-        if let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: now),
+        } else if let thirtyDaysAgo = calendar.date(byAdding: .day, value: -7, to: now),
+                  date >= thirtyDaysAgo {
+            return "Предыдущие 7 дней"
+        } else if let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: now),
            date >= thirtyDaysAgo {
             return "Предыдущие 30 дней"
-        }
-        
-        if calendar.isDate(date, equalTo: now, toGranularity: .year) {
+        } else if calendar.isDate(date, equalTo: now, toGranularity: .year) {
             let month = calendar.component(.month, from: date)
             return "\(month)"
         }
@@ -35,15 +48,10 @@ struct DateFormatterHelper {
         return "\(year)"
     }
     
-    static func formatDateCell(_ date: Date) -> String {
+    static private func formatDateToString(date: Date, format: String) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.dateFormat = format
         
         return dateFormatter.string(from: date)
-    }
-    
-    //TODO: - append implementation logic
-    static func formatDateNote(_ date: Date) -> String {
-        return ""
     }
 }

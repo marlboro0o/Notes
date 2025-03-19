@@ -11,34 +11,26 @@ struct NotesTableCaretacer {
     
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
-    private let key: String
-    
-    init(key: String) {
-        self.key = key
-    }
     
     func save(values: [Note]) {
-        do {
-            let data = try encoder.encode(values)
-            UserDefaults.standard.set(data, forKey: key)
-        } catch {
-            print(error)
+        guard
+            let data = try? encoder.encode(values)
+        else {
+            print("Ошибка при сохранении списка заметок")
+            return
         }
+        UserDefaults.standard.set(data, forKey: "Notes")
     }
     
     func load() -> [Note] {
         var result: [Note] = []
         
         guard
-            let data = UserDefaults.standard.data(forKey: key)
+            let data = UserDefaults.standard.data(forKey: "Notes"),
+            let result = try? decoder.decode([Note].self, from: data)
         else {
+            print("Ошибка при загрузке списка заметок")
             return result
-        }
-        
-        do {
-            result = try decoder.decode([Note].self, from: data)
-        } catch {
-            print(error)
         }
         
         return result

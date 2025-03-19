@@ -7,12 +7,16 @@
 
 import Foundation
 
-struct NotesTableViewSections {
-    let header: String
-    var viewState: [NotesTableViewState]
+struct NotesTableViewState {
+    var sections: [NotesTableViewSections]
 }
 
-struct NotesTableViewState {
+struct NotesTableViewSections {
+    let header: String
+    var rows: [NotesTableViewRow]
+}
+
+struct NotesTableViewRow {
     let title: String
     let textBody: String
     let dateHeaderCell: String
