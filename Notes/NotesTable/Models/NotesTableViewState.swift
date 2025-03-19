@@ -8,8 +8,18 @@
 import Foundation
 
 struct NotesTableViewState {
+    var sections: [NotesTableViewSections]
+}
+
+struct NotesTableViewSections {
+    let header: String
+    var rows: [NotesTableViewRow]
+}
+
+struct NotesTableViewRow {
     let title: String
     let textBody: String
     let dateHeaderCell: String
     let dateCell: String
 }
+

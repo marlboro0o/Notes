@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class NoteProxy {
+final class NoteProxy {
     
     var addNotePublisher: AnyPublisher<NoteConfig, Never> {
         addNoteSubject.eraseToAnyPublisher()

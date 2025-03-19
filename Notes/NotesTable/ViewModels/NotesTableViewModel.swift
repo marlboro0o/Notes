@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
-    var viewState: [NotesTableViewState] = []
+    var viewState: NotesTableViewState = NotesTableViewState(sections: [])
     var viewStatePublisher: AnyPublisher<Bool, Never> {
         viewStateSubject.eraseToAnyPublisher()
     }
@@ -29,7 +29,10 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
         self.bind()
     }
     
-    func didTapOpenNote(for index: Int) {
+    func didTapOpenNote(for indexPath: IndexPath) {
+        
+        let index = findIndexNoteInViewState(for: indexPath)
+        
         guard let note = model.notes[safe: index] else { return }
         configSubject.send(note.toConfig())
     }
@@ -43,12 +46,17 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
     }
     
     func editNote(config: NoteConfig) {
-        guard 
+        guard
             let index = model.notes.firstIndex(where: { $0.id == config.id })
         else {
             return
         }
         model.editNote(for: index, note: config.toNote())
+    }
+    
+    func deleteNote(for indexPath: IndexPath) {
+        let _index = findIndexNoteInViewState(for: indexPath)
+        model.deleteNote(for: _index)
     }
     
     func setProxy(_ proxy: NoteProxy) {
@@ -80,14 +88,45 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
             }.store(in: &cancellables)
     }
     
-    private func toViewState(_ array: [Note]) -> [NotesTableViewState] {
-        array.map { $0.toViewState() }
+    private func toViewState(_ array: [Note]) -> NotesTableViewState {
+        var sections: [NotesTableViewSections] = []
+        
+        let viewStateRows = array.map {
+            $0.toViewState()
+        }
+        
+        viewStateRows.forEach { body in
+            if let index = sections.firstIndex(where: { body.dateHeaderCell == $0.header }) {
+                sections[index].rows.append(body)
+            } else {
+                sections.append(NotesTableViewSections(header: body.dateHeaderCell, rows: [body]))
+            }
+        }
+        
+        return NotesTableViewState(sections: sections)
+    }
+    
+    private func findIndexNoteInViewState(for indexPath: IndexPath) -> Int {
+        var index = 0
+        var section = 0
+        
+        while index < model.notes.count {
+            if section == indexPath.section {
+                index += indexPath.row
+                break
+            }
+            
+            index += viewState.sections[indexPath.section].rows.count
+            section += 1
+        }
+        
+        return index
     }
 }
 
 private extension Note {
-    func toViewState() -> NotesTableViewState {
-        NotesTableViewState(
+    func toViewState() -> NotesTableViewRow {
+        NotesTableViewRow(
             title: title,
             textBody: content.components(separatedBy: .newlines).joined(separator: " "),
             dateHeaderCell: DateFormatterHelper.formatDateHeaderCell(date),

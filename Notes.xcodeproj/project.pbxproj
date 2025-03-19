@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		77909E442D8A080500697C74 /* NotesTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77909E432D8A080500697C74 /* NotesTableViewHeaderCell.swift */; };
+		77909E472D8A089300697C74 /* NotesTableCaretacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77909E462D8A089300697C74 /* NotesTableCaretacer.swift */; };
 		77DA28A02D47FB2900C22074 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA289F2D47FB2900C22074 /* SceneDelegate.swift */; };
 		77DA28A32D47FF9000C22074 /* NotesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A22D47FF9000C22074 /* NotesModel.swift */; };
 		77DA28A52D48094400C22074 /* NotesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DA28A42D48094400C22074 /* NotesTableViewModel.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		77909E432D8A080500697C74 /* NotesTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewHeaderCell.swift; sourceTree = "<group>"; };
+		77909E462D8A089300697C74 /* NotesTableCaretacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableCaretacer.swift; sourceTree = "<group>"; };
 		77DA289F2D47FB2900C22074 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		77DA28A22D47FF9000C22074 /* NotesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesModel.swift; sourceTree = "<group>"; };
 		77DA28A42D48094400C22074 /* NotesTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewModel.swift; sourceTree = "<group>"; };
@@ -102,6 +106,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		77909E452D8A088000697C74 /* Memento */ = {
+			isa = PBXGroup;
+			children = (
+				77909E462D8A089300697C74 /* NotesTableCaretacer.swift */,
+			);
+			path = Memento;
+			sourceTree = "<group>";
+		};
 		77DA289C2D47F99600C22074 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +129,7 @@
 			children = (
 				77F06D282D1C631F00D29193 /* NotesTableViewController.swift */,
 				77DA28A82D53D95A00C22074 /* NotesTableViewCell.swift */,
+				77909E432D8A080500697C74 /* NotesTableViewHeaderCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -132,6 +145,7 @@
 		77DA28A12D47FC4F00C22074 /* NotesTable */ = {
 			isa = PBXGroup;
 			children = (
+				77909E452D8A088000697C74 /* Memento */,
 				77DA289C2D47F99600C22074 /* Models */,
 				77DA289E2D47F9AC00C22074 /* ViewModels */,
 				77DA289D2D47F9A100C22074 /* Views */,
@@ -386,8 +400,10 @@
 				77DA28A72D4FE6FD00C22074 /* NotesRouter.swift in Sources */,
 				77DA28B52D5D20CE00C22074 /* DateFormatterHelper.swift in Sources */,
 				77DA28C62D6F983A00C22074 /* NoteConfig.swift in Sources */,
+				77909E472D8A089300697C74 /* NotesTableCaretacer.swift in Sources */,
 				77DA28C42D6F903900C22074 /* NoteProtocols.swift in Sources */,
 				77DA28B82D639F3000C22074 /* Note.swift in Sources */,
+				77909E442D8A080500697C74 /* NotesTableViewHeaderCell.swift in Sources */,
 				77DA28BA2D639F5900C22074 /* NotesTableViewState.swift in Sources */,
 				77DA28BE2D6E59FB00C22074 /* NoteViewState.swift in Sources */,
 				77DA28A92D53D95A00C22074 /* NotesTableViewCell.swift in Sources */,
