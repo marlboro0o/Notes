@@ -19,14 +19,14 @@ struct NotesTableCaretacer {
             print("Ошибка при сохранении списка заметок")
             return
         }
-        UserDefaults.standard.set(data, forKey: "Notes")
+        UserDefaults.standard.set(data, forKey: Constants.key)
     }
     
     func load() -> [Note] {
-        var result: [Note] = []
+        let result: [Note] = []
         
         guard
-            let data = UserDefaults.standard.data(forKey: "Notes"),
+            let data = UserDefaults.standard.data(forKey: Constants.key),
             let result = try? decoder.decode([Note].self, from: data)
         else {
             print("Ошибка при загрузке списка заметок")
@@ -35,4 +35,8 @@ struct NotesTableCaretacer {
         
         return result
     }
+}
+
+private enum Constants {
+    static let key = "Notes"
 }

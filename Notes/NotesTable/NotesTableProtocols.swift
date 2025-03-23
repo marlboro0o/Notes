@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-protocol NotesTablePresentingProperties {
+protocol NotesTablePresentingProperties: AnyObject {
     var viewState: NotesTableViewState { get }
 }
 
@@ -34,7 +34,7 @@ protocol NotesModelProperties {
 
 protocol NoteModelMethods {
     func createNote(note: Note)
-    func editNote(for index: Int, note: Note)
+    func editNote(note: Note)
     func deleteNote(for index: Int)
 }
 

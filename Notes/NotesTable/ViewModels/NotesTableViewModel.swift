@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
-    var viewState: NotesTableViewState = NotesTableViewState(sections: [])
+    var viewState: NotesTableViewState = NotesTableViewState()
     var viewStatePublisher: AnyPublisher<Bool, Never> {
         viewStateSubject.eraseToAnyPublisher()
     }
@@ -26,12 +26,12 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
     
     init(model: NoteModel) {
         self.model = model
-        self.bind()
+        bind()
     }
     
     func didTapOpenNote(for indexPath: IndexPath) {
         
-        let index = findIndexNoteInViewState(for: indexPath)
+        let index = indexNote(for: indexPath)
         
         guard let note = model.notes[safe: index] else { return }
         configSubject.send(note.toConfig())
@@ -46,17 +46,12 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
     }
     
     func editNote(config: NoteConfig) {
-        guard
-            let index = model.notes.firstIndex(where: { $0.id == config.id })
-        else {
-            return
-        }
-        model.editNote(for: index, note: config.toNote())
+        model.editNote(note: config.toNote())
     }
     
     func deleteNote(for indexPath: IndexPath) {
-        let _index = findIndexNoteInViewState(for: indexPath)
-        model.deleteNote(for: _index)
+        let index = indexNote(for: indexPath)
+        model.deleteNote(for: index)
     }
     
     func setProxy(_ proxy: NoteProxy) {
@@ -91,9 +86,7 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
     private func toViewState(_ array: [Note]) -> NotesTableViewState {
         var sections: [NotesTableViewSections] = []
         
-        let viewStateRows = array.map {
-            $0.toViewState()
-        }
+        let viewStateRows = array.map{ $0.toViewState() }
         
         viewStateRows.forEach { body in
             if let index = sections.firstIndex(where: { body.dateHeaderCell == $0.header }) {
@@ -106,18 +99,11 @@ final class NotesTableViewModel: ObservableObject, NotesTablePresenting {
         return NotesTableViewState(sections: sections)
     }
     
-    private func findIndexNoteInViewState(for indexPath: IndexPath) -> Int {
-        var index = 0
-        var section = 0
+    private func indexNote(for indexPath: IndexPath) -> Int {
+        var index = indexPath.row
         
-        while index < model.notes.count {
-            if section == indexPath.section {
-                index += indexPath.row
-                break
-            }
-            
-            index += viewState.sections[indexPath.section].rows.count
-            section += 1
+        for i in 0..<indexPath.section {
+            index += viewState.sections[i].rows.count
         }
         
         return index

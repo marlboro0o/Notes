@@ -9,6 +9,14 @@ import Foundation
 
 struct NotesTableViewState {
     var sections: [NotesTableViewSections]
+    
+    init() {
+        self.sections = []
+    }
+    
+    init(sections: [NotesTableViewSections]) {
+        self.sections = sections
+    }
 }
 
 struct NotesTableViewSections {

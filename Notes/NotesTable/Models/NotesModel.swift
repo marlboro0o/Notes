@@ -10,7 +10,7 @@ import Combine
 
 class NoteModel: ObservableObject, NoteModelLogic {
     
-    var notes: [Note] = [] {
+    var notes: [Note] {
         didSet {
             notes.sort { $0.date > $1.date }
             notesCaretacer.save(values: notes)
@@ -32,11 +32,13 @@ class NoteModel: ObservableObject, NoteModelLogic {
         notes.append(note)
     }
     
-    func editNote(for index: Int, note: Note) {
+    func editNote(note: Note) {
+        guard let index = notes.firstIndex(where: { $0.id == note.id } ) else { return }
         notes[index] = note
     }
     
     func deleteNote(for index: Int) {
+        guard (notes[safe: index] != nil) else { return }
         notes.remove(at: index)
     }
 }

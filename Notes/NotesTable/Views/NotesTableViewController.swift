@@ -134,16 +134,11 @@ extension NotesTableViewController: UITableViewDataSource {
         }
         
         let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
-        let position: CellPosition
-        
-        if numberOfRows == 1 {
-            position = .single
-        } else if indexPath.row == 0 {
-            position = .top
-        } else if indexPath.row == numberOfRows - 1 {
-            position = .bottom
-        } else {
-            position = .middle
+        let position: NotesTableViewCell.CellPosition  = switch numberOfRows {
+            case 1: .single
+            case _ where indexPath.row == 0: .top
+            case _ where indexPath.row == numberOfRows - 1: .bottom
+            default: .middle
         }
         
         cell.roundCorners(for: position)
@@ -213,7 +208,7 @@ extension NotesTableViewController {
     private func makeLabelHead() -> UILabel {
         let label = UILabel()
         label.text = "Заметки"
-        label.font = UIFont.boldSystemFont(ofSize: 40)
+        label.font = Constants.labelHeadFont
         
         return label
     }
@@ -254,7 +249,7 @@ extension NotesTableViewController {
     private func makeFooterView() -> UIView {
         let view = UIView()
         view.backgroundColor = .systemGray5
-        view.alpha = 0.98
+        view.alpha = Constants.footerViewAlpha
         return view
     }
     
@@ -271,9 +266,8 @@ extension NotesTableViewController {
     
     private func makeActionConfiguration(indexPath: IndexPath) -> UISwipeActionsConfiguration {
         
-        let deletedAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, _)  in
-            guard let self else { return }
-            viewModel.deleteNote(for: indexPath)
+        let deletedAction = UIContextualAction(style: .destructive, title: "Delete") { [weak viewModel] (_, _, _)  in
+            viewModel?.deleteNote(for: indexPath)
         }
         
         return UISwipeActionsConfiguration(actions: [deletedAction])
@@ -287,6 +281,7 @@ extension NotesTableViewController {
 //MARK: - Constants
 extension NotesTableViewController {
     private enum Constants {
+        static let labelHeadFont: UIFont = UIFont.boldSystemFont(ofSize: 40)
         static let tableViewHeaderHeight: CGFloat = 10
         static let tableViewFooterHeight: CGFloat = 30
         static let tableViewWidth: Int = -40
@@ -301,6 +296,7 @@ extension NotesTableViewController {
         static let footerViewY: CGFloat = -100
         static let newNoteButtonX: CGFloat = -50
         static let newNoteButtonY: CGFloat = 15
+        static let footerViewAlpha: CGFloat = 0.98
     }
 }
 

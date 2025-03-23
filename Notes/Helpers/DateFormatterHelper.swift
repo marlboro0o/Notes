@@ -14,12 +14,12 @@ enum DateFormatterHelper {
     }
     
     static func formatDateCell(_ date: Date) -> String {
-        return formatDateToString(date: date, format: "dd.MM.yyyy")
+        return formatDateToString(date: date, format: .ddMMyyyy)
     }
     
     //TODO: - append implementation logic
     static func formatDateNote(_ date: Date) -> String {
-        return "\(formatDateToString(date: date, format: "dd.MMMM.yyyy")) в \(formatDateToString(date: date, format: "TTTT"))"
+        return formatDateToString(date: date, format: .ddMMMMyyyyTTTT)
     }
 }
 
@@ -30,15 +30,13 @@ extension DateFormatterHelper {
         let now = Date()
         
         if calendar.isDateInToday(date) {
-            return "Сегодня"
+            return Constants.today
         } else if calendar.isDateInYesterday(date) {
-            return "Вчера"
-        } else if let thirtyDaysAgo = calendar.date(byAdding: .day, value: -7, to: now),
-                  date >= thirtyDaysAgo {
-            return "Предыдущие 7 дней"
-        } else if let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: now),
-           date >= thirtyDaysAgo {
-            return "Предыдущие 30 дней"
+            return Constants.yesterday
+        } else if dateIsIncludedInRange(date: date, calendar: calendar, now: now, value: -7){
+            return Constants.sevenDaysAgo
+        } else if dateIsIncludedInRange(date: date, calendar: calendar, now: now, value: -30) {
+            return Constants.thirtyDaysAgo
         } else if calendar.isDate(date, equalTo: now, toGranularity: .year) {
             let month = calendar.component(.month, from: date)
             return "\(month)"
@@ -48,10 +46,39 @@ extension DateFormatterHelper {
         return "\(year)"
     }
     
-    static private func formatDateToString(date: Date, format: String) -> String {
+    static private func formatDateToString(date: Date, format: formatDate) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
+        
+        switch format {
+        case .ddMMyyyy:
+            dateFormatter.dateFormat = "dd.MM.yyyy"
+        case .ddMMMMyyyyTTTT:
+            dateFormatter.locale = Locale(identifier: "ru_RU")
+            dateFormatter.dateFormat = "d MMMM yyyy'г. в' HH:mm"
+        }
         
         return dateFormatter.string(from: date)
     }
+    
+    static private func dateIsIncludedInRange(date: Date, calendar: Calendar, now: Date, value: Int) -> Bool {
+        guard
+            let resultDate = calendar.date(byAdding: .day, value: value, to: now),
+             date >= resultDate
+        else {
+            return false
+        }
+        return true
+    }
+}
+
+private enum formatDate {
+    case ddMMyyyy
+    case ddMMMMyyyyTTTT
+}
+
+private enum Constants {
+    static let today = "Сегодня"
+    static let yesterday = "Вчера"
+    static let sevenDaysAgo = "Предыдущие 7 дней"
+    static let thirtyDaysAgo = "Предыдущие 30 дней"
 }

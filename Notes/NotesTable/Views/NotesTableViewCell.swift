@@ -33,9 +33,7 @@ final class NotesTableViewCell: UITableViewCell {
             origin: CGPoint(
                 x: Constants.containerViewX,
                 y: Constants.containerViewY),
-            size: CGSize(
-                width: contentView.bounds.width,
-                height: contentView.bounds.height))
+            size: contentView.bounds.size)
         
         contentLabel.frame = CGRect(
             origin: CGPoint(
@@ -57,17 +55,17 @@ final class NotesTableViewCell: UITableViewCell {
             maskPath = UIBezierPath(
                 roundedRect: bounds,
                 byRoundingCorners: [.topLeft, .topRight],
-                cornerRadii: CGSize(width: 10, height: 10))
+                cornerRadii: .size10)
         case .bottom:
             maskPath = UIBezierPath(
                 roundedRect: bounds,
                 byRoundingCorners: [.bottomLeft, .bottomRight],
-                cornerRadii: CGSize(width: 10, height: 10))
+                cornerRadii: .size10)
         case .single:
             maskPath = UIBezierPath(
                 roundedRect: bounds,
                 byRoundingCorners: [.allCorners],
-                cornerRadii: CGSize(width: 10, height: 10))
+                cornerRadii: .size10)
         case .middle:
             layer.mask = nil
             return
@@ -105,25 +103,32 @@ extension NotesTableViewCell {
     }
 }
 
-//MARK: - Constants
-extension NotesTableViewCell {
-    private enum Constants {
-        static let titleSize: CGSize = CGSize(width: 250, height: 40)
-        static let bodySize: CGSize = CGSize(width: 300, height: 40)
-        static let titleFont: UIFont = UIFont.boldSystemFont(ofSize: 18)
-        static let bodyFont: UIFont = UIFont.systemFont(ofSize: 16)
-        static let titleX: CGFloat = 25
-        static let titleY: CGFloat = 5
-        static let bodyX: CGFloat = 25
-        static let bodyY: CGFloat = -3
-        static let containerViewX: CGFloat = 0
-        static let containerViewY: CGFloat = 0
+fileprivate extension CGSize {
+    static var size10: CGSize {
+        CGSize(width: 10, height: 10)
     }
 }
 
-enum CellPosition {
-    case top
-    case bottom
-    case single
-    case middle
+//MARK: - Constants
+private enum Constants {
+    static let titleSize: CGSize = CGSize(width: 250, height: 40)
+    static let bodySize: CGSize = CGSize(width: 300, height: 40)
+    static let titleFont: UIFont = UIFont.boldSystemFont(ofSize: 18)
+    static let bodyFont: UIFont = UIFont.systemFont(ofSize: 16)
+    static let titleX: CGFloat = 25
+    static let titleY: CGFloat = 5
+    static let bodyX: CGFloat = 25
+    static let bodyY: CGFloat = -3
+    static let containerViewX: CGFloat = 0
+    static let containerViewY: CGFloat = 0
+}
+
+
+extension NotesTableViewCell {
+    enum CellPosition {
+        case top
+        case bottom
+        case single
+        case middle
+    }
 }
