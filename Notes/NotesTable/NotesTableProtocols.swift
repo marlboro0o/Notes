@@ -8,15 +8,16 @@
 import UIKit
 import Combine
 
-protocol NotesTablePresentingProperties {
-    var viewState: [NotesTableViewState] { get }
+protocol NotesTablePresentingProperties: AnyObject {
+    var viewState: NotesTableViewState { get }
 }
 
 protocol NotesTablePresentingMethods {
     func didTapAddNote()
-    func didTapOpenNote(for index: Int)
+    func didTapOpenNote(for indexPath: IndexPath)
     func addNote(config: NoteConfig)
     func editNote(config: NoteConfig)
+    func deleteNote(for indexPath: IndexPath)
     func setProxy(_ proxy: NoteProxy)
 }
 
@@ -33,7 +34,8 @@ protocol NotesModelProperties {
 
 protocol NoteModelMethods {
     func createNote(note: Note)
-    func editNote(for index: Int, note: Note)
+    func editNote(note: Note)
+    func deleteNote(for index: Int)
 }
 
 protocol NoteModelPublisher {

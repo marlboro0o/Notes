@@ -52,7 +52,13 @@ final class NotesTableViewController: UIViewController {
                 width: view.bounds.width - 40,
                 height: 40))
 
-        setTableViewFrame()
+        tableView.frame = CGRect(
+            origin: CGPoint(
+                x: view.bounds.minX + Constants.tableViewX,
+                y: searchTextField.frame.maxY + Constants.tableViewY),
+            size: CGSize(
+                width: Int(view.bounds.width) + Constants.tableViewWidth,
+                height: Int(view.bounds.height) - Int(searchTextField.frame.maxY + Constants.tableViewY) - 70))
         
         footerView.frame = .init(
             origin: .init(
@@ -75,21 +81,67 @@ final class NotesTableViewController: UIViewController {
 
 // MARK: - TableViewDataSource
 extension NotesTableViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.viewState.count
+        guard let section = viewModel.viewState.sections[safe: section] else { return 0 }
+        return section.rows.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        viewModel.viewState.sections.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        Constants.tableViewHeaderHeight
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        Constants.tableViewFooterHeight
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard
+            let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "NoteHeaderCell") as? NotesTableViewHeaderCell
+        else {
+            assertionFailure("Всегда должен быть айтем на индексе")
+            return UITableViewCell()
+        }
+        
+        if let viewState = viewModel.viewState.sections[safe: section] {
+            cell.configure(text: viewState.header)
+        }
+        
+        return cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard 
+        guard
             let cell = tableView.dequeueReusableCell(withIdentifier: "NoteCell", for: indexPath) as? NotesTableViewCell
         else {
             assertionFailure("Всегда должен быть айтем на индексе")
             return UITableViewCell()
         }
         
-        if let state = viewModel.viewState[safe: indexPath.row] {
-            cell.configure(state: state)
+        if let section = viewModel.viewState.sections[safe: indexPath.section],
+           let viewState = section.rows[safe: indexPath.row] {
+            cell.configure(state: viewState)
         }
+        
+        let numberOfRows = tableView.numberOfRows(inSection: indexPath.section)
+        let position: NotesTableViewCell.CellPosition  = switch numberOfRows {
+            case 1: .single
+            case _ where indexPath.row == 0: .top
+            case _ where indexPath.row == numberOfRows - 1: .bottom
+            default: .middle
+        }
+        
+        cell.roundCorners(for: position)
         
         return cell
     }
@@ -101,13 +153,14 @@ extension NotesTableViewController: UITableViewDataSource {
 
 // MARK: - TableViewDelegate
 extension NotesTableViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         makeActionConfiguration(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        viewModel.didTapOpenNote(for: indexPath.row)
+        viewModel.didTapOpenNote(for: indexPath)
     }
 }
 
@@ -134,14 +187,13 @@ extension NotesTableViewController {
                     return
                 }
                 tableView.reloadData()
-                setTableViewFrame()
             }
             .store(in: &cancellable)
         
         viewModel.configPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-                guard 
+                guard
                     let self,
                     let navigationController
                 else {
@@ -156,7 +208,7 @@ extension NotesTableViewController {
     private func makeLabelHead() -> UILabel {
         let label = UILabel()
         label.text = "Заметки"
-        label.font = UIFont.boldSystemFont(ofSize: 40)
+        label.font = Constants.labelHeadFont
         
         return label
     }
@@ -185,11 +237,11 @@ extension NotesTableViewController {
     private func makeTableView() -> UITableView {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
-        tableView.layer.cornerRadius = 10
-        tableView.layer.masksToBounds = true
+        tableView.isScrollEnabled = true
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(NotesTableViewCell.self, forCellReuseIdentifier: "NoteCell")
+        tableView.register(NotesTableViewHeaderCell.self, forHeaderFooterViewReuseIdentifier: "NoteHeaderCell")
         
         return tableView
     }
@@ -197,6 +249,7 @@ extension NotesTableViewController {
     private func makeFooterView() -> UIView {
         let view = UIView()
         view.backgroundColor = .systemGray5
+        view.alpha = Constants.footerViewAlpha
         return view
     }
     
@@ -213,22 +266,11 @@ extension NotesTableViewController {
     
     private func makeActionConfiguration(indexPath: IndexPath) -> UISwipeActionsConfiguration {
         
-        let deletedAction = UIContextualAction(style: .destructive, title: "Delete") {
-            (_, _, _)  in
-            print("delete")
+        let deletedAction = UIContextualAction(style: .destructive, title: "Delete") { [weak viewModel] (_, _, _)  in
+            viewModel?.deleteNote(for: indexPath)
         }
         
         return UISwipeActionsConfiguration(actions: [deletedAction])
-    }
-    
-    private func setTableViewFrame() {
-        tableView.frame = .init(
-            origin: .init(
-                x: view.bounds.minX + Constants.tableViewX,
-                y: searchTextField.frame.maxY + Constants.tableViewY),
-            size: CGSize(
-                width: Int(view.bounds.width) + Constants.tableViewWidth,
-                height: viewModel.viewState.count * Constants.tableViewHeight))
     }
     
     @objc private func didTapNewNote() {
@@ -239,6 +281,9 @@ extension NotesTableViewController {
 //MARK: - Constants
 extension NotesTableViewController {
     private enum Constants {
+        static let labelHeadFont: UIFont = UIFont.boldSystemFont(ofSize: 40)
+        static let tableViewHeaderHeight: CGFloat = 10
+        static let tableViewFooterHeight: CGFloat = 30
         static let tableViewWidth: Int = -40
         static let tableViewHeight: Int = 80
         static let headerLabelX: CGFloat = 20
@@ -251,6 +296,7 @@ extension NotesTableViewController {
         static let footerViewY: CGFloat = -100
         static let newNoteButtonX: CGFloat = -50
         static let newNoteButtonY: CGFloat = 15
+        static let footerViewAlpha: CGFloat = 0.98
     }
 }
 
